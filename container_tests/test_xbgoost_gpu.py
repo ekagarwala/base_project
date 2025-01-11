@@ -10,8 +10,8 @@ dtrain = xgb.DMatrix(X, label=y)
 
 # Set parameters for GPU training
 params = {
-    'device': 'cuda',  # Use GPU acceleration
-    'tree_method': 'hist',  # Use GPU for training
+    "device": "cuda",  # Use GPU acceleration
+    "tree_method": "hist",  # Use GPU for training
 }
 
 try:
