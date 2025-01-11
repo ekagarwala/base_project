@@ -12,6 +12,7 @@ RUN apt-get update && apt-get install -y \
     curl \
     git \
     default-jre \
+    bash-completion \
     && rm -rf /var/lib/apt/lists/*
 
 RUN add-apt-repository ppa:deadsnakes/ppa && \
@@ -45,6 +46,18 @@ RUN mkdir /app/ && \
 # Expose ports 8888 and 54321
 EXPOSE 8888
 EXPOSE 54321
+
+ENV PATH="/app/.venv/bin:$PATH"
+
+# Install bash-it
+RUN git clone --depth=1 https://github.com/Bash-it/bash-it.git ~/.bash_it && \
+    ~/.bash_it/install.sh --silent
+
+# Git configuration
+RUN git config --global user.email "edwardagarwala@gmail.com" && \
+    git config --global user.name "Edward Agarwala" && \
+    git config --global core.editor "vim" && \
+    git config --global push.autoSetupRemote true
 
 # Set the default command to python3
 CMD ["/app/.venv/bin/python3"]
