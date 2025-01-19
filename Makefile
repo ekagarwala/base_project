@@ -1,8 +1,14 @@
-DIRECTORIES = data results data/raw
+
 RAWDATA = data/raw/diabetes.csv
 
+TRAIN_TEST_TUNE = data/train.parquet data/tune.parquet data/test.parquet
+DIRECTORIES = data results data/raw
 
-data/train.parquet data/tune.parquet data/test.parquet &: data/base_data.parquet src/split_data.py | ${DIRECTORIES}
+data/xgboost_model/model.ubj: data/train.parquet data/tune.parquet src/build_model.py src/features.py | ${DIRECTORIES}
+	python -m src.build_model
+
+# Create train, tune, and test parquet files
+${TRAIN_TEST_TUNE} &: data/base_data.parquet src/split_data.py | ${DIRECTORIES}
 	python -m src.split_data
 
 # Generate base data parquet files

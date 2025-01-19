@@ -1,9 +1,14 @@
-import pandas as pd
 import argparse
 
+import pyarrow
+import pandas as pd
 
-def import_csv_to_dataframe(file_path:str) -> pd.DataFrame:
-    df = pd.read_csv(file_path)
+gender_cat: pd.CategoricalDtype = pd.CategoricalDtype(["M", "F"], ordered=True)
+
+
+def import_csv_to_dataframe(file_path: str) -> pd.DataFrame:
+    df = pd.read_csv(file_path, dtype={"SEX": gender_cat})
+    print(df.dtypes)
     return df
 
 
