@@ -4,7 +4,7 @@ RAWDATA = data/raw/diabetes.csv
 TRAIN_TEST_TUNE = data/train.parquet data/tune.parquet data/test.parquet
 DIRECTORIES = data results data/raw
 
-data/xgboost_model/model.ubj: data/train.parquet data/tune.parquet src/build_model.py src/features.py | ${DIRECTORIES}
+data/xgboost_model/model.ubj: data/train.parquet data/tune.parquet src/build_model.py src/features.py src/xgb_prepare_data.py | ${DIRECTORIES}
 	python -m src.build_model
 
 # Create train, tune, and test parquet files

@@ -1,10 +1,9 @@
-from pathlib import Path
 import json
-
-from numpy import ndarray
+from pathlib import Path
 
 import pandas as pd
 import xgboost as xgb
+from numpy import ndarray
 from sklearn.metrics import mean_squared_error
 
 from src.compare_predictions import RegressionMetrics, evaluate_regression
@@ -28,6 +27,7 @@ MODEL_PARAMS: dict = {
     "num_boost_round": 100,
     "early_stopping_rounds": 10,
 }
+
 
 def score_model(model: xgb.Booster, data: xgb.DMatrix) -> RegressionMetrics:
 
@@ -78,7 +78,14 @@ if __name__ == "__main__":
 
     train_tune: list[xgb.DMatrix] = []
     for path in [train_data_path, tune_data_path]:
-        train_tune.append(prepare_data(df=add_features(pd.read_parquet(path)), feature_columns=FEATURE_COLUMNS, target_column=TARGET_COLUMN, weight_column=WEIGHT_COLUMN))
+        train_tune.append(
+            prepare_data(
+                df=add_features(pd.read_parquet(path)),
+                feature_columns=FEATURE_COLUMNS,
+                target_column=TARGET_COLUMN,
+                weight_column=WEIGHT_COLUMN,
+            )
+        )
 
     build_xgboost_model(
         train_data=train_tune[0], tune_data=train_tune[1], params=MODEL_PARAMS

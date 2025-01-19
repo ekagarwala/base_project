@@ -3,6 +3,7 @@ import xgboost as xgb
 
 from src.features import add_features
 
+
 def prepare_data(
     df: pd.DataFrame,
     feature_columns: list,

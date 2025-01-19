@@ -1,7 +1,7 @@
 import argparse
 
-import pyarrow
 import pandas as pd
+import pyarrow
 
 gender_cat: pd.CategoricalDtype = pd.CategoricalDtype(["M", "F"], ordered=True)
 
