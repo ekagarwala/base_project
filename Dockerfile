@@ -33,6 +33,7 @@ RUN mkdir /app/ && \
     scikit-learn \
     jupyter \
     pandas \
+    pyarrow \
     numpy \
     h2o \
     xgboost \

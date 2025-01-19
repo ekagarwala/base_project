@@ -33,7 +33,8 @@
 				"github.copilot-chat",
 				"github.vscode-pull-request-github",
 				"ms-vscode.makefile-tools",
-				"mechatroner.rainbow-csv"
+				"mechatroner.rainbow-csv",
+				"ms-python.isort"
 			]
 		}
 	},
