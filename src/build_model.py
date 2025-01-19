@@ -74,11 +74,8 @@ def build_xgboost_model(
 
 if __name__ == "__main__":
 
-    train_data_path = TRAIN_DATA_PATH
-    tune_data_path = TUNE_DATA_PATH
-
     train_tune: list[xgb.DMatrix] = []
-    for path in [train_data_path, tune_data_path]:
+    for path in [TRAIN_DATA_PATH, TUNE_DATA_PATH]:
         train_tune.append(
             prepare_data(
                 df=pd.read_parquet(path),
