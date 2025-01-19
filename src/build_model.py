@@ -80,7 +80,7 @@ if __name__ == "__main__":
     for path in [train_data_path, tune_data_path]:
         train_tune.append(
             prepare_data(
-                df=add_features(pd.read_parquet(path)),
+                df=pd.read_parquet(path),
                 feature_columns=FEATURE_COLUMNS,
                 target_column=TARGET_COLUMN,
                 weight_column=WEIGHT_COLUMN,
