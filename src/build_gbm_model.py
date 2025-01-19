@@ -31,6 +31,8 @@ MODEL_PARAMS: dict = {
     "early_stopping_rounds": 10,
 }
 
+XGB_MODEL_FILENAME = "data/xgboost_model/model.ubj"
+
 
 def score_model(model: xgb.Booster, data: xgb.DMatrix) -> RegressionMetrics:
 
@@ -64,9 +66,9 @@ def build_xgboost_model(
     print(f"Tuning Results: {tune_results}")
 
     # Save the model
-    model_path = Path("data/xgboost_model/")
+    model_path = Path(XGB_MODEL_FILENAME).parent
     model_path.mkdir(parents=True, exist_ok=True)
-    model.save_model(model_path / "model.ubj")
+    model.save_model(XGB_MODEL_FILENAME)
     print(f"Model saved to {model_path}")
 
     # Save the metrics
