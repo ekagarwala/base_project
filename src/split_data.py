@@ -10,6 +10,10 @@ STRATIFY_COLS = []
 
 RANDOM_STATE = 234551
 
+TRAIN_DATA_PATH = "data/train.parquet"
+TUNE_DATA_PATH = "data/tune.parquet"
+TEST_DATA_PATH = "data/test.parquet"
+
 
 def split_dataframe(
     df,
@@ -83,6 +87,6 @@ def split_dataframe(
 if __name__ == "__main__":
     df = pd.read_parquet("data/base_data.parquet")
     train_df, tune_df, test_df = split_dataframe(df)
-    train_df.to_parquet("data/train.parquet")
-    tune_df.to_parquet("data/tune.parquet")
-    test_df.to_parquet("data/test.parquet")
+    train_df.to_parquet(TRAIN_DATA_PATH)
+    tune_df.to_parquet(TUNE_DATA_PATH)
+    test_df.to_parquet(TEST_DATA_PATH)

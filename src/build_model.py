@@ -7,6 +7,7 @@ from numpy import ndarray
 from sklearn.metrics import mean_squared_error
 
 from src.compare_predictions import RegressionMetrics, evaluate_regression
+from src.split_data import TRAIN_DATA_PATH, TUNE_DATA_PATH, TEST_DATA_PATH
 from src.xgb_prepare_data import prepare_data
 
 TARGET_COLUMN = "Y"
@@ -73,8 +74,8 @@ def build_xgboost_model(
 
 if __name__ == "__main__":
 
-    train_data_path = "data/train.parquet"
-    tune_data_path = "data/tune.parquet"
+    train_data_path = TRAIN_DATA_PATH
+    tune_data_path = TUNE_DATA_PATH
 
     train_tune: list[xgb.DMatrix] = []
     for path in [train_data_path, tune_data_path]:
