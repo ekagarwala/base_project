@@ -79,7 +79,7 @@ if __name__ == "__main__":
 
     train_tune: list[xgb.DMatrix] = []
     for path in [train_data_path, tune_data_path]:
-        train_tune.append(prepare_data(df=add_features(pd.read_parquet(path), feature_columns=FEATURE_COLUMNS, target_column=TARGET_COLUMN, weight_column=WEIGHT_COLUMN)))
+        train_tune.append(prepare_data(df=add_features(pd.read_parquet(path)), feature_columns=FEATURE_COLUMNS, target_column=TARGET_COLUMN, weight_column=WEIGHT_COLUMN))
 
     build_xgboost_model(
         train_data=train_tune[0], tune_data=train_tune[1], params=MODEL_PARAMS
