@@ -23,7 +23,7 @@ MODEL_PARAMS: dict = {
     "max_bin": 31,
     "colsample_bytree": 1,
     "colsample_bylevel": 1,
-    "subsample": .85,
+    "subsample": .8,
     "gamma": 0,
     "min_child_weight": 1,
     "seed": RANDOM_SEED,

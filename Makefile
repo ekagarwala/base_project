@@ -24,5 +24,5 @@ docker-build:
 	docker build -t base-python-ds .
 
 clean:
-	find ./data -type f ! -name "diabetes.csv" ! -name "test1.csv" -exec rm -f {} +
+	find ./data -type f ! -wholename "./data/raw/*" -exec rm -f {} +
 	find ./results -type f -exec rm -f {} +
