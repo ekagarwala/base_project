@@ -8,7 +8,6 @@ import xgboost as xgb
 from sklearn.metrics import mean_squared_error
 
 from src.compare_predictions import RegressionMetrics, evaluate_regression
-from src.features import add_features
 from src.xgb_prepare_data import prepare_data
 
 TARGET_COLUMN = "Y"
