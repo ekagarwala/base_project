@@ -32,8 +32,8 @@ MODEL_PARAMS: dict = {
     "objective": "reg:squarederror",
     "device": "gpu",
     "tree_method": "hist",
-    "max_depth": hp.choice("max_depth", arange(1, 7, 1)),
     "learning_rate": 0.1,
+    "max_depth": hp.choice("max_depth", arange(1, 7, 1)),
     "max_bin": hp.choice("max_bin", arange(2, 256, 1)),
     "colsample_bytree": hp.uniform("colsample_bytree", 0.8, 1),
     "colsample_bylevel": hp.uniform("colsample_bylevel", 0.8, 1),
@@ -80,33 +80,28 @@ def build_xgboost_model(
     trials = Trials()
     # Include best params so far
 
-    # trials = generate_trials_to_calculate(
-    #     [
-    #         {
-    #             "objective": "reg:squarederror",
-    #             "device": "gpu",
-    #             "tree_method": "hist",
-    #             "max_depth": 3,
-    #             "learning_rate": 0.1,
-    #             "max_bin": 180,
-    #             "colsample_bytree": 0.833,
-    #             "colsample_bylevel": 0.835,
-    #             "subsample": 0.549,
-    #             "gamma": 0,
-    #             "min_child_weight": 8,
-    #             "seed": RANDOM_SEED,
-    #             "num_boost_round": 100,
-    #             "early_stopping_rounds": 10,
-    #         } | {
-    #             "colsample_bylevel": 0.9444821584189089,
-    #             "colsample_bytree": 0.8424201729222517,
-    #             "max_bin": 146,
-    #             "max_depth": 1,
-    #             "min_child_weight": 4,
-    #             "subsample": 0.5666843689841289,
-    #         },
-    #     ]
-    # )
+    trials = generate_trials_to_calculate(
+        [
+            {
+                "objective": "reg:squarederror",
+                "device": "gpu",
+                "tree_method": "hist",
+                "learning_rate": 0.1,
+                "seed": RANDOM_SEED,
+                "num_boost_round": 100,
+                "early_stopping_rounds": 10,
+            }
+            | {
+                "colsample_bylevel": np.float64(0.9758194276451145),
+                "colsample_bytree": np.float64(0.9672745551883308),
+                "gamma": np.float64(0.07924871129549596),
+                "max_bin": np.int64(6),
+                "max_depth": np.int64(2),
+                "min_child_weight": np.int64(5),
+                "subsample": np.float64(0.9767236964288231),
+            }
+        ]
+    )
 
     def objective(params: dict) -> dict:
         model: xgb.Booster = xgb.train(
