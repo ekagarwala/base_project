@@ -37,6 +37,7 @@ RUN mkdir /app/ && \
     numpy \
     h2o \
     xgboost \
+    hyperopt \
     matplotlib \
     seaborn \
     black \
