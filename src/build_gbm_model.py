@@ -3,9 +3,11 @@ from pathlib import Path
 
 import pandas as pd
 import xgboost as xgb
+import numpy as np
 from numpy import ndarray, arange, argmin
 from sklearn.metrics import mean_squared_error
 from hyperopt import fmin, tpe, hp, STATUS_OK, Trials
+from hyperopt.fmin import generate_trials_to_calculate
 
 from src.compare_predictions import RegressionMetrics, evaluate_regression
 from src.split_data import TRAIN_DATA_PATH, TUNE_DATA_PATH
@@ -30,18 +32,20 @@ MODEL_PARAMS: dict = {
     "objective": "reg:squarederror",
     "device": "gpu",
     "tree_method": "hist",
-    "max_depth": hp.choice("max_depth", arange(2, 10, 1)),
+    "max_depth": hp.choice("max_depth", arange(1, 7, 1)),
     "learning_rate": 0.1,
     "max_bin": hp.choice("max_bin", arange(2, 256, 1)),
     "colsample_bytree": hp.uniform("colsample_bytree", 0.8, 1),
     "colsample_bylevel": hp.uniform("colsample_bylevel", 0.8, 1),
     "subsample": hp.uniform("subsample", 0.5, 1),
-    "gamma": 0,
+    "gamma": hp.uniform("gamma", 0, 0.2),
     "min_child_weight": hp.choice("min_child_weight", arange(1, 10, 1)),
     "seed": RANDOM_SEED,
     "num_boost_round": 100,
     "early_stopping_rounds": 10,
 }
+
+PARAM_TRIALS: int = 100
 
 XGB_MODEL_FILENAME = "data/xgboost_model/model.ubj"
 
@@ -51,8 +55,9 @@ def getBestModelfromTrials(trials):
         trial for trial in trials if STATUS_OK == trial["result"]["status"]
     ]
     losses = [float(trial["result"]["loss"]) for trial in valid_trial_list]
-    index_having_minumum_loss:int = argmin(losses)
+    index_having_minumum_loss: int = argmin(losses)
     return valid_trial_list[index_having_minumum_loss]["result"]["model"]
+
 
 def score_model(model: xgb.Booster, data: xgb.DMatrix) -> RegressionMetrics:
 
@@ -69,9 +74,39 @@ def build_xgboost_model(
     train_data: xgb.DMatrix,
     tune_data: xgb.DMatrix = None,
     params: dict = MODEL_PARAMS,
+    param_trials: int = PARAM_TRIALS,
 ):
 
     trials = Trials()
+    # Include best params so far
+
+    # trials = generate_trials_to_calculate(
+    #     [
+    #         {
+    #             "objective": "reg:squarederror",
+    #             "device": "gpu",
+    #             "tree_method": "hist",
+    #             "max_depth": 3,
+    #             "learning_rate": 0.1,
+    #             "max_bin": 180,
+    #             "colsample_bytree": 0.833,
+    #             "colsample_bylevel": 0.835,
+    #             "subsample": 0.549,
+    #             "gamma": 0,
+    #             "min_child_weight": 8,
+    #             "seed": RANDOM_SEED,
+    #             "num_boost_round": 100,
+    #             "early_stopping_rounds": 10,
+    #         } | {
+    #             "colsample_bylevel": 0.9444821584189089,
+    #             "colsample_bytree": 0.8424201729222517,
+    #             "max_bin": 146,
+    #             "max_depth": 1,
+    #             "min_child_weight": 4,
+    #             "subsample": 0.5666843689841289,
+    #         },
+    #     ]
+    # )
 
     def objective(params: dict) -> dict:
         model: xgb.Booster = xgb.train(
@@ -90,7 +125,7 @@ def build_xgboost_model(
         fn=objective,
         space=params,
         algo=tpe.suggest,
-        max_evals=100,
+        max_evals=param_trials,
         trials=trials,
     )
 
@@ -114,6 +149,8 @@ def build_xgboost_model(
     with open(model_path / "metrics.txt", "w") as f:
         f.write(tune_results.__repr__())
 
+    return trials
+
 
 if __name__ == "__main__":
 
@@ -128,6 +165,4 @@ if __name__ == "__main__":
             )
         )
 
-    build_xgboost_model(
-        train_data=train_tune[0], tune_data=train_tune[1], params=MODEL_PARAMS
-    )
+    trials = build_xgboost_model(train_data=train_tune[0], tune_data=train_tune[1])
