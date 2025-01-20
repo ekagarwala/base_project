@@ -8,7 +8,7 @@ from math import sqrt
 
 @dataclass
 class RegressionMetrics:
-    mse: float
+    rmse: float
     pearson_corr: float
     spearman_corr: float
     r2: float
