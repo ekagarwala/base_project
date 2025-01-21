@@ -26,6 +26,17 @@ FEATURE_COLUMNS: list[str] = [
     "S5",
     "S6",
 ]
+FEATURE_COLUMNS: list[str] = [
+    "AGE",
+    "SEX_NUM",
+    "BMI",
+    "BP",
+    "S1",
+    "S3",
+    "S4",
+    "S5",
+    "S6",
+]
 WEIGHT_COLUMN = None
 RANDOM_SEED: int = 422134987614
 MODEL_PARAMS: dict = {
