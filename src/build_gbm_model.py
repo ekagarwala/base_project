@@ -1,13 +1,13 @@
 import json
 from pathlib import Path
 
+import numpy as np
 import pandas as pd
 import xgboost as xgb
-import numpy as np
-from numpy import ndarray, arange, argmin
-from sklearn.metrics import mean_squared_error
-from hyperopt import fmin, tpe, hp, STATUS_OK, Trials
+from hyperopt import STATUS_OK, Trials, fmin, hp, tpe
 from hyperopt.fmin import generate_trials_to_calculate
+from numpy import arange, argmin, ndarray
+from sklearn.metrics import mean_squared_error
 
 from src.compare_predictions import RegressionMetrics, evaluate_regression
 from src.split_data import TRAIN_DATA_PATH, TUNE_DATA_PATH

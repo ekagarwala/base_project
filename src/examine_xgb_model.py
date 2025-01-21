@@ -1,18 +1,29 @@
-from matplotlib import pyplot as plt
+from pathlib import Path
+
 import matplotlib
+import pandas as pd
 import seaborn as sns
 import shap
-
-import pandas as pd
-from pathlib import Path
 import xgboost as xgb
+from matplotlib import pyplot as plt
 
-from src.build_gbm_model import XGB_MODEL_FILENAME, FEATURE_COLUMNS, TARGET_COLUMN, WEIGHT_COLUMN
+from src.build_gbm_model import (
+    FEATURE_COLUMNS,
+    TARGET_COLUMN,
+    WEIGHT_COLUMN,
+    XGB_MODEL_FILENAME,
+)
 from src.split_data import TUNE_DATA_PATH
 from src.xgb_prepare_data import prepare_data
 
 
-def examine_xgb_model(model: xgb.Booster, tune_data: pd.DataFrame, feature_columns=FEATURE_COLUMNS, target_column=TARGET_COLUMN, weight_column=WEIGHT_COLUMN) -> pd.DataFrame:
+def examine_xgb_model(
+    model: xgb.Booster,
+    tune_data: pd.DataFrame,
+    feature_columns=FEATURE_COLUMNS,
+    target_column=TARGET_COLUMN,
+    weight_column=WEIGHT_COLUMN,
+) -> pd.DataFrame:
     """Examine the model.
 
     Args:
@@ -38,7 +49,9 @@ def examine_xgb_model(model: xgb.Booster, tune_data: pd.DataFrame, feature_colum
     plot_folder.mkdir(parents=True, exist_ok=True)
 
     # Actual vs. Predicted
-    tune_data[[target_column, "prediction"]].plot.scatter(x=target_column, y="prediction")
+    tune_data[[target_column, "prediction"]].plot.scatter(
+        x=target_column, y="prediction"
+    )
     plt.xlabel("Actual")
     plt.ylabel("Predicted")
     plt.title("Predicted vs. Actual - Tune Data")
@@ -55,7 +68,7 @@ def examine_xgb_model(model: xgb.Booster, tune_data: pd.DataFrame, feature_colum
     # filepath = Path("results/xgboost_model/pairplot.png")
     # with open(filepath, "wb") as file:
     #     plt.savefig(file)
-    
+
     # Feature Importance
     explainer = shap.TreeExplainer(model)
     shap_values = explainer.shap_values(tune_matrix.get_data())
@@ -77,8 +90,9 @@ def examine_xgb_model(model: xgb.Booster, tune_data: pd.DataFrame, feature_colum
     with open(filepath, "wb") as file:
         plt.savefig(file)
     plt.clf()
-    
+
     return
+
 
 if __name__ == "__main__":
     model = xgb.Booster()

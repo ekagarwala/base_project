@@ -1,9 +1,8 @@
 from dataclasses import dataclass
+from math import sqrt
 
 from scipy.stats import pearsonr, spearmanr
 from sklearn.metrics import mean_squared_error, r2_score
-
-from math import sqrt
 
 
 @dataclass
